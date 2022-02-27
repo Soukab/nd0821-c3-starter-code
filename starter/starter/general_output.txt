@@ -1,5 +1,0 @@
-General metrics
-Precision = 1.0
-Recall = 0.0
-FBeta = 0.0
-

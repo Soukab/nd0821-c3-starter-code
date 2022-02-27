@@ -1,70 +1,39 @@
-import pickle
-from contextlib import redirect_stdout
+# Script to train machine learning model.
 
-import pandas as pd
 from sklearn.model_selection import train_test_split
-from ml.data import process_data, categorical_features
-from ml.model import train_model, compute_model_metrics, slice_inference
 
-data = pd.read_csv("../data/clean_census.csv", index_col=False)
+# Add the necessary imports for the starter code.
+import pandas as pd
+from ml.data import process_data
+from ml.model import train_model
+
+# Add code to load in the data.
+data = pd.read_csv(r"../data/clean_census.csv")
 
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
-
 train, test = train_test_split(data, test_size=0.20)
 
-cat_features = categorical_features(data)
-keep_cat = ["marital-status", "race", "relationship", "sex"]  # Limit sparsity
-
-# Process training data
-X_train, y_train, encoder, lb = process_data(
-    train,
-    keep_cat=keep_cat,
-    categorical_features=cat_features,
-    label="salary",
-    training=True,
-)
+cat_features = [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "native-country",
+]
 
 # Process the test data with the process_data function.
-X_test, y_test, encoder, _ = process_data(
-    test,
-    categorical_features=cat_features,
-    keep_cat=keep_cat,
-    label="salary",
-    training=False,
-    encoder=encoder,
+X_train, y_train, encoder, lb = process_data(
+    train, categorical_features=cat_features, label="salary", training=True
 )
 
-# Train model.
-clf = train_model(X_train, y_train)
-
-# Save model pickle files (model, enconder, labeler)
-with open("../model/model.pkl", "wb") as f:
-    pickle.dump(clf, f)
-with open("../model/encoder.pkl", "wb") as f:
-    pickle.dump(encoder, f)
-with open("../model/labeler.pkl", "wb") as f:
-    pickle.dump(lb, f)
-
-# Predictions
-predictions = clf.predict(X_test)
-
-# General Metrics
-y_test = lb.fit_transform(y_test.values).ravel()
-precision, recall, fbeta = compute_model_metrics(y_test, predictions)
-
-with open("general_output.txt", "w") as f:
-    with redirect_stdout(f):
-        print("General metrics")
-        print(f"Precision = {precision}")
-        print(f"Recall = {recall}")
-        print(f"FBeta = {fbeta}")
-        print()
-
-# Slice Metrics
-slice_inference(
-    predictions, y_test, test.reset_index(drop=True), keep_cat, printed=True
-)
+# Train and save a model.
+model = train_model(X_train, y_train)
+pd.to_pickle(model, "../model/model.pkl")
 
 
-if __name__ == "__main__":
-    pass
+#Saving the encoder and the LabelBinarizer for being used in the API later
+pd.to_pickle(encoder, "../model/encoder.pkl")
+pd.to_pickle(lb, "../model/lb.pkl")
