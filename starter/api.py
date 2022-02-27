@@ -1,7 +1,7 @@
 import json
 import requests
 
-URL = "https://udacity-emr.herokuapp.com/predict_salary/"
+URL = "https://new-app-udacity.herokuapp.com/predict_salary/"
 
 sample_prediction = {
     "age": 39,
