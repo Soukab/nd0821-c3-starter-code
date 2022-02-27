@@ -1,5 +1,6 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
-
+from sklearn.linear_model import LogisticRegression
+from contextlib import redirect_stdout
 
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
@@ -17,8 +18,8 @@ def train_model(X_train, y_train):
     model
         Trained machine learning model.
     """
-
-    pass
+    clf = LogisticRegression(random_state=42, max_iter=5000).fit(X_train, y_train)
+    return clf
 
 
 def compute_model_metrics(y, preds):
@@ -57,4 +58,29 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    pass
+    preds = model.predict(X)
+    return preds
+
+
+def slice_inference(predictions, y, data, categorical_features, printed=False):
+    if printed:
+        with open("slice_output.txt", "w") as f:
+            for category in categorical_features:
+                for cat_value in sorted(data[category].unique()):
+                    mask = data[data[category] == cat_value].index
+                    mask_predictions = predictions[mask]
+                    mask_y = y[mask]
+
+                    precision, recall, fbeta = compute_model_metrics(
+                        mask_y, mask_predictions
+                    )
+
+                    with redirect_stdout(f):
+                        print(
+                            f"Slice metrics - Feature: {category} - Value: {cat_value}"
+                        )
+                        print(f"Category percent {round(100*len(mask)/len(data),2)}")
+                        print(f"Precision = {precision}")
+                        print(f"Recall = {recall}")
+                        print(f"FBeta = {fbeta}")
+                        print()

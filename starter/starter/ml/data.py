@@ -1,9 +1,27 @@
 import numpy as np
+import pandas as pd
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
+from typing import List
+
+
+def categorical_features(X: pd.DataFrame) -> List[str]:
+    """Extracts list of categorical features from input dataframe X
+    Parameters
+    ----------
+    X: pd.Dataframe
+        Input dataframe
+    Returns
+    -------
+    List of categorical features
+    """
+    num_cols = X._get_numeric_data().columns
+    cat_cols = list(set(X.columns) - set(num_cols))
+    cat_cols = sorted(cat_cols)
+    return cat_cols
 
 
 def process_data(
-    X, categorical_features=[], label=None, training=True, encoder=None, lb=None
+    X, categorical_features=[], keep_cat=[], label=None, training=True, encoder=None, lb=None
 ):
     """ Process the data used in the machine learning pipeline.
 
@@ -47,10 +65,14 @@ def process_data(
     if label is not None:
         y = X[label]
         X = X.drop([label], axis=1)
+        try:
+            categorical_features.remove(label)
+        except ValueError:
+            pass
     else:
         y = np.array([])
 
-    X_categorical = X[categorical_features].values
+    X_categorical = X[keep_cat].values
     X_continuous = X.drop(*[categorical_features], axis=1)
 
     if training is True:
