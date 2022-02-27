@@ -9,11 +9,11 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
 #Import the inference function to be used to predict the values
-from starter.starter.ml.model import inference
-from starter.starter.ml.data import process_data
+from starter.ml.model import inference
+from starter.ml.data import process_data
 #Import the model to be used to predict
-model = pd.read_pickle(r"starter/model/model.pkl")
-Encoder = pd.read_pickle(r"starter/model/encoder.pkl")
+model = pd.read_pickle(r"model/model.pkl")
+Encoder = pd.read_pickle(r"model/encoder.pkl")
 
 #Initial a FastAPI instance
 app = FastAPI()
