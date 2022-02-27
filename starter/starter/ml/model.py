@@ -1,6 +1,6 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
-
+import numpy as np
 
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
@@ -56,5 +56,5 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    prediction = model.predict(X)
+    prediction = model.predict(np.array([X[0][:-1]]))
     return prediction

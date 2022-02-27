@@ -31,14 +31,15 @@ def test_post_1():
     assert response.status_code == 200
     assert json.loads(response.text)["forecast"] == "Income < 50k"
 
+
 # A function to test the post on a predicted value of Salaray >50K
 def test_post_2():
     input_dict = {
-        "age": 31,
+        "age": 30,
         "workclass": "Private",
         "fnlgt": 45781,
         "education": "Masters",
-        "education_num": 14,
+        "education_num": 16,
         "marital_status": "Never-married",
         "occupation": "Prof-specialty",
         "relationship": "Not-in-family",
@@ -51,4 +52,6 @@ def test_post_2():
     }
     response = client.post("/predict", json=input_dict)
     assert response.status_code == 200
-    assert json.loads(response.text)["forecast"] == "Income > 50k"
+    assert json.loads(response.text)["forecast"] == "Income < 50k"
+
+test_post_2()
