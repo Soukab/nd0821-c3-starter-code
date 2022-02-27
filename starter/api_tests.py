@@ -52,6 +52,8 @@ def test_post_2():
     }
     response = client.post("/predict", json=input_dict)
     assert response.status_code == 200
+    print(response.status_code)
+    print(response.text)
     assert json.loads(response.text)["forecast"] == "Income < 50k"
 
 test_post_2()

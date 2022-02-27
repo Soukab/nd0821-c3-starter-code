@@ -20,4 +20,4 @@ data= {
 response = requests.post("https://new-app-udacity.herokuapp.com/predict/", data=json.dumps(data))
 
 print(response.status_code)
-print(response.json())
+print(response.text)
