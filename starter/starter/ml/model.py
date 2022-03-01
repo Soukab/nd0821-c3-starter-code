@@ -56,5 +56,5 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    prediction = model.predict(np.array([X[0][:-1]]))
+    prediction = model.predict(X)
     return prediction

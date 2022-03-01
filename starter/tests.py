@@ -7,7 +7,20 @@ from starter.ml.data import process_data
 from starter.ml.model import train_model, compute_model_metrics, inference
 
 # Add code to load in the data.
-data = pd.read_csv(r'./clean_census.csv')
+columns = ['age', 'workclass', 'fnlgt', 'education', 'education-num', 'marital-status', 'occupation',
+           'relationship', 'race', 'sex', 'hours-per-week', 'native-country', 'salary']
+
+def createRow(education, age, occupation, sex, salary):
+    return [age, 'State-gov', 77516, education, 13, 'married', occupation,
+            'in-family', 'White', sex, 40, 'United-States', salary]
+
+data = pd.DataFrame(
+        [createRow('Doctorate', 50, 'Prof-specialty', 'Male', '>50K') for i in range(0, 50)] +
+        [createRow('Masters', 35, 'Exec-managerial', 'Female', '>50K') for i in range(0, 50)] +
+        [createRow('Bachelors', 30, 'Tech-support', 'Male', '>50K') for i in range(0, 50)] +
+        [createRow('11th', 40, 'Protective-serv', 'Male', '<=50K') for i in range(0, 50)] +
+        [createRow('Some-college', 28, 'Sales', 'Female', '<=50K') for i in range(0, 50)],
+        columns=columns)
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
 train, test = train_test_split(data, test_size=0.20)
 

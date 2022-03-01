@@ -56,4 +56,3 @@ def test_post_2():
     print(response.text)
     assert json.loads(response.text)["forecast"] == "Income < 50k"
 
-test_post_2()
