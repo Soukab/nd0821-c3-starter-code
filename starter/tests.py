@@ -40,7 +40,6 @@ X_train, y_train, encoder, lb = process_data(
     train, categorical_features=cat_features, label="salary", training=True
 )
 
-
 def test_train_model():
     #Test that this function will return a trained RandomForestClassifier
     model = train_model(X_train, y_train)

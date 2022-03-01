@@ -1,5 +1,8 @@
 import json
 from starlette.testclient import TestClient
+
+from fastapi.testclient import TestClient
+
 from main import app
 
 client = TestClient(app)
@@ -22,12 +25,12 @@ def test_post_1():
         "relationship": "Not-in-family",
         "race": "White",
         "sex": "Male",
-        "capital_gain": 2174,
-        "capital_loss": 0,
         "hours_per_week": 40,
         "native_country": "United-States"
     }
     response = client.post("/predict", json=input_dict)
+    print(response.status_code)
+    print(response.text)
     assert response.status_code == 200
     assert json.loads(response.text)["forecast"] == "Income < 50k"
 
@@ -35,19 +38,17 @@ def test_post_1():
 # A function to test the post on a predicted value of Salaray >50K
 def test_post_2():
     input_dict = {
-        "age": 30,
+        "age": 50,
         "workclass": "Private",
         "fnlgt": 45781,
-        "education": "Masters",
+        "education": "Doctorate",
         "education_num": 16,
-        "marital_status": "Never-married",
+        "marital_status": "Married-civ-spouse",
         "occupation": "Prof-specialty",
-        "relationship": "Not-in-family",
+        "relationship": "Husband",
         "race": "White",
-        "sex": "Female",
-        "capital_gain": 14084,
-        "capital_loss": 0,
-        "hours_per_week": 50,
+        "sex": "Male",
+        "hours_per_week": 30,
         "native_country": "United-States"
     }
     response = client.post("/predict", json=input_dict)
@@ -56,3 +57,5 @@ def test_post_2():
     print(response.text)
     assert json.loads(response.text)["forecast"] == "Income < 50k"
 
+test_post_1()
+test_post_2()

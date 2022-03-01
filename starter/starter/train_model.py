@@ -29,6 +29,7 @@ X_train, y_train, encoder, lb = process_data(
     train, categorical_features=cat_features, label="salary", training=True
 )
 # Train and save a model.
+print(len(X_train[0]))
 model = train_model(X_train, y_train)
 pd.to_pickle(model, "../model/model.pkl")
 
