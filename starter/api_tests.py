@@ -25,6 +25,8 @@ def test_post_1():
         "relationship": "Not-in-family",
         "race": "White",
         "sex": "Male",
+        "capital_gain": 2174,
+        "capital_loss": 0,
         "hours_per_week": 40,
         "native_country": "United-States"
     }
@@ -38,24 +40,27 @@ def test_post_1():
 # A function to test the post on a predicted value of Salaray >50K
 def test_post_2():
     input_dict = {
-        "age": 50,
+        "age": 31,
         "workclass": "Private",
         "fnlgt": 45781,
-        "education": "Doctorate",
-        "education_num": 16,
-        "marital_status": "Married-civ-spouse",
+        "education": "Masters",
+        "education_num": 14,
+        "marital_status": "Never-married",
         "occupation": "Prof-specialty",
-        "relationship": "Husband",
+        "relationship": "Not-in-family",
         "race": "White",
-        "sex": "Male",
-        "hours_per_week": 30,
+        "sex": "Female",
+        "capital_gain": 14084,
+        "capital_loss": 0,
+        "hours_per_week": 50,
         "native_country": "United-States"
     }
     response = client.post("/predict", json=input_dict)
-    assert response.status_code == 200
     print(response.status_code)
     print(response.text)
-    assert json.loads(response.text)["forecast"] == "Income < 50k"
+    assert response.status_code == 200
+    assert json.loads(response.text)["forecast"] == "Income > 50k"
+
 
 test_post_1()
 test_post_2()

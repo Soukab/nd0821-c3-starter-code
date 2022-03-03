@@ -17,7 +17,7 @@ data = {
     "hours_per_week": 40,
     "native_country": "United-States"
 }
-response = requests.post("https://new-app-udacity.herokuapp.com/predict/", data=json.dumps(data))
+response = requests.post("https://live-predict.herokuapp.com/predict/", data=json.dumps(data))
 
 print(response.status_code)
 print(response.text)

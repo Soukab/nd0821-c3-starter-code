@@ -12,10 +12,8 @@ from typing import List
 from starter.ml.model import inference
 from starter.ml.data import process_data
 #Import the model to be used to predict
-model = pd.read_pickle(r"starter/model/model.pkl")
-Encoder = pd.read_pickle(r"starter/model/encoder.pkl")
-
-
+model = pd.read_pickle("model/model.pkl")
+Encoder = pd.read_pickle("model/encoder.pkl")
 
 #Initial a FastAPI instance
 app = FastAPI()
@@ -29,6 +27,7 @@ if "DYNO" in os.environ and os.path.isdir(".dvc"):
 
 # pydantic models
 class DataIn(BaseModel):
+    #The input should be alist of 108 values
     age : int = 39
     workclass : str =  "State-gov"
     fnlgt : int = 77516
@@ -39,9 +38,14 @@ class DataIn(BaseModel):
     relationship : str = "Not-in-family"
     race : str = "White"
     sex : str = "Male"
+    capital_gain : int = 2174
+    capital_loss : int = 0
     hours_per_week : int = 40
     native_country : str = "United-States"
 
+class DataOut(BaseModel):
+    #The forecast output will be either >50K or <50K
+    forecast: str = "Income > 50k"
 
 #Adding a Welcome message to the initial page
 @app.get("/")
@@ -54,7 +58,7 @@ async def welcome():
     return {"Welcome": "to the Model!"}
 
 
-@app.post("/predict", status_code=200)
+@app.post("/predict", response_model=DataOut, status_code=200)
 def get_prediction(payload: DataIn):
     #Reading the input data
     age = payload.age
@@ -67,9 +71,11 @@ def get_prediction(payload: DataIn):
     relationship = payload.relationship
     race = payload.race
     sex = payload.sex
+    capital_gain = payload.capital_gain
+    capital_loss = payload.capital_loss
     hours_per_week = payload.hours_per_week
     native_country = payload.native_country
-    #Converted the inputs into Dataframe to be processed 
+    #Converted the inputs into Dataframe to be processed
     df = pd.DataFrame([{"age" : age,
                         "workclass" : workclass,
                         "fnlgt" : fnlgt,
@@ -80,6 +86,8 @@ def get_prediction(payload: DataIn):
                         "relationship" : relationship,
                         "race" : race,
                         "sex" : sex,
+                        "capital-gain" : capital_gain,
+                        "capital-loss" : capital_loss,
                         "hours-per-week" : hours_per_week,
                         "native-country" : native_country}])
     # Process the data with the process_data function.
@@ -94,9 +102,9 @@ def get_prediction(payload: DataIn):
         "native-country",
     ]
     X_processed, y_processed, encoder, lb = process_data(df, categorical_features=cat_features, training=False,encoder=Encoder)
-    #Calling the inference function to make a prediction  
+    #Calling the inference function to make a prediction
     prediction_outcome = inference(model, X_processed)
-    print('fchkel', prediction_outcome)
+
     #Interpreting the prediction for the end user
     if prediction_outcome == 0:
         prediction_outcome = "Income < 50k"
