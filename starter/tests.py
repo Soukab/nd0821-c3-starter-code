@@ -8,7 +8,8 @@ from starter.ml.model import train_model, compute_model_metrics, inference
 
 
 # Add code to load in the data.
-data = pd.read_csv(os.path.join(os.getcwd(),r"data/clean_census.csv"))
+r"starter/model/model.pkl"
+data = pd.read_csv(r"starter/data/clean_census.csv")
 
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
 train, test = train_test_split(data, test_size=0.20)
