@@ -9,7 +9,7 @@ from starter.ml.model import train_model, compute_model_metrics, inference
 
 simp_path = '/starter/data/clean_census.csv'
 abs_path = os.path.abspath(simp_path)# Add code to load in the data.
-data = pd.read_csv('clean_census.csv')
+data = pd.read_csv(r'clean_census.csv')
 
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
 train, test = train_test_split(data, test_size=0.20)
