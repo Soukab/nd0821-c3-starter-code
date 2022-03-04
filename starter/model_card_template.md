@@ -21,6 +21,9 @@ We have used 20% of the original dataset for evaluation purposes of the model.
 
 ## Metrics
 We have used three metrics in this project; fbeta_score, precision_score and recall_score.
+Precision: 0.784
+Recall:0.623
+fbeta:0.694
 
 ## Ethical Considerations
 - The app is intended for learning purposes and a simple model was utilized. No new information is to be inferred or business decisions to be made.
